@@ -106,7 +106,7 @@ fun blurBitmap(bitmap: Bitmap, blurLevel: Int): Bitmap {
  * @throws FileNotFoundException Throws if bitmap file cannot be found
  */
 @Throws(FileNotFoundException::class)
-fun writeBitmapToFile(applicationContext: Context, bitmap: Bitmap): Uri {
+fun writeBitmapToFile(applicationContext: Unit, bitmap: Bitmap): Uri {
     val name = String.format("blur-filter-output-%s.png", UUID.randomUUID().toString())
     val outputDir = File(applicationContext.filesDir, OUTPUT_PATH)
     if (!outputDir.exists()) {
