@@ -7,6 +7,8 @@ import android.content.res.Resources
 import android.graphics.BitmapFactory
 import android.util.Log
 import androidx.work.ListenableWorker
+import com.example.bluromatic.KEY_BLUR_LEVEL
+import com.example.bluromatic.KEY_IMAGE_URI
 import com.example.bluromatic.R
 
 private val Any.resources: Resources?
@@ -16,46 +18,41 @@ private val Any.resources: Resources?
 private const val TAG = "BlurWorker"
 
 class BlurWorker(ctx: Context, params: WorkerParameters) : CoroutineWorker(ctx, params) {
-    override suspend fun doWork(
+    override suspend fun doWork(): Result {
 
-    ): Result {
-            val applicationContext =
-                makeStatusNotification(
-                    applicationContext.resources.getString(R.string.blurring_image),
-                    applicationContext
-                )
+        // ADD THESE LINES
+        val resourceUri = inputData.getString(KEY_IMAGE_URI)
+        val blurLevel = inputData.getInt(KEY_BLUR_LEVEL, 1)
 
-            return try {
-                val picture = BitmapFactory.decodeResource(
-                    applicationContext.resources,
-                    R.drawable.android_cupcake
-                )
+        val applicationContext =
+            makeStatusNotification(
+                applicationContext.resources.getString(R.string.blurring_image),
+                applicationContext
+            )
 
-                val output = blurBitmap(picture, 1)
+        return@withContext try {
+            // NEW code
+            require(!resourceUri.isNullOrBlank()) {
+                val errorMessage =
+                    applicationContext.resources?.getString(R.string.invalid_input_uri)
+                if (errorMessage != null) {
+                    Log.e(TAG, errorMessage)
+                }
+                errorMessage!!
 
-                val outputUri = writeBitmapToFile(applicationContext, output)
-
-                makeStatusNotification(
-                    "Output is $outputUri",
-                    applicationContext
-                )
-
-                Result.success()
-            } catch (throwable: Throwable) {
-                Log.e(
-                    TAG,
-                    applicationContext.resources?.getString(R.string.error_applying_blur),
-                    throwable
-                )
-                ListenableWorker.Result.failure()
             }
-    }
+        }
+//     val picture = BitmapFactory.decodeResource(
+//         applicationContext.resources,
+//         R.drawable.android_cupcake
+//     )
 
-    private fun makeStatusNotification(message: String, context: Unit) {
-        TODO("Not yet implemented")
-    }
+        val resolver = applicationContext.contentResolver
 
+        val picture = BitmapFactory.decodeStream(
+            resolver.openInputStream(Uri.parse(resourceUri))
+        )
+    }
 }
-
 
 
