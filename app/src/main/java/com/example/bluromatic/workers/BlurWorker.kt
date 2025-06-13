@@ -32,6 +32,7 @@ class BlurWorker(ctx: Context, params: WorkerParameters) : CoroutineWorker(ctx, 
 
         return@withContext try {
             // NEW code
+
             require(!resourceUri.isNullOrBlank()) {
                 val errorMessage =
                     applicationContext.resources?.getString(R.string.invalid_input_uri)
