@@ -40,6 +40,7 @@ class CleanupWorker(ctx: Context, params: WorkerParameters) : CoroutineWorker(ct
                             val name = entry.name
                             if (name.isNotEmpty() && name.endsWith(".png")) {
                                 val deleted = entry.delete()
+
                                 Log.i(TAG, "Deleted $name - $deleted")
                             }
                         }
