@@ -61,6 +61,7 @@ class SaveImageToFileWorker(ctx: Context, params: WorkerParameters) : CoroutineW
                         applicationContext.resources.getString(R.string.writing_to_mediaStore_failed)
                     )
                     Result.failure()
+
                 }
             } catch (exception: Exception) {
                 Log.e(
