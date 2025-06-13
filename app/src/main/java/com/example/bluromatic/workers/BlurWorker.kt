@@ -40,6 +40,7 @@ class BlurWorker(ctx: Context, params: WorkerParameters) : CoroutineWorker(ctx, 
                 }
                 errorMessage!!
 
+
             }
         }
 //     val picture = BitmapFactory.decodeResource(
